@@ -2,7 +2,16 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 const { emailExiste, esRoleValido, existeUsuarioPorId } = require('../helpers/db-validators');
-const { validarCampos } = require('../middlewares/validar-campos');
+
+
+
+// const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
+// const { validarCampos } = require('../middlewares/validar-campos');
+// const { validarJWT } = require('../middlewares/validar-jwt');
+
+// Lo anterior se optimizó a:
+// Apunta a Index.js en carpeta de middlewares
+const { validarCampos, validarJWT, esAdminRole, tieneRole } = require('../middlewares')
 
 const { usuariosGet, usuariosDelete, usuariosPatch, usuariosPost, usuariosPut } = require('../controllers/usuarios');
 
@@ -33,6 +42,9 @@ router.post('/',
 
 router.delete('/:id',
 [
+    validarJWT,
+    // esAdminRole,
+    tieneRole('ADMIN_ROLE', 'VENTAS_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos

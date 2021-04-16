@@ -1,5 +1,5 @@
+const { Categoria, Usuario, Producto } = require('../models');
 const Role = require('../models/role');
-const Usuario = require('../models/usuario');
 
 const esRoleValido = async( rol = '' ) => 
 {
@@ -21,16 +21,80 @@ const emailExiste = async( correo = '' ) =>
 
 const existeUsuarioPorId = async( id ) =>
 {
-    const existeUsuario = await Usuario.findById(id)
+    const existeUsuario = await Usuario.findById(id);
     if ( !existeUsuario )
     {
         throw new Error(`El id ${ id } no existe en la base de datos`);
     }
 }
 
+// Categorías
+
+const noExisteCategoriaPorNombre = async ( categoria ) => 
+{
+    categoria = categoria.toUpperCase();
+    const query = { nombre: categoria };
+    
+    const existeCat = await Categoria.find( query );
+
+    console.log(existeCat);
+
+    if ( existeCat.length === 0 )
+    {
+        throw new Error(`La categoría ${ categoria } no existe en la base de datos.`);
+    }
+    
+}
+
+const noExisteCategoria = async ( categoria ) => 
+{
+    
+    const existeCat = await Categoria.findById( categoria );
+
+    if ( !existeCat )
+    {
+        throw new Error(`La categoría ${ categoria } no existe en la base de datos.`);
+    }
+    
+}
+
+// Productos
+
+const existeProducto = async( producto ) =>
+{
+    if ( !producto )
+    {
+        throw new Error('El nombre es obligatorio');
+    }
+
+    producto = producto.toUpperCase();
+    query = { nombre: producto }
+    const existeProducto = await Producto.find( query );
+
+    if ( existeProducto.length > 0 )
+    {
+        throw new Error(`El producto ${ producto } ya existe en la base de datos.`);
+    }
+}
+
+const existeProductoPorId = async( producto ) => 
+{
+    const existeProducto = await Producto.findById( producto );
+
+    if ( !existeProducto )
+    {
+        throw new Error(`El producto ${ producto } no existe en la base de datos.`);
+    }
+
+}
+
 module.exports = 
 {
     emailExiste,
     esRoleValido,
-    existeUsuarioPorId
+    existeProducto,
+    existeProductoPorId,
+    existeUsuarioPorId,
+    noExisteCategoria,
+    noExisteCategoriaPorNombre,
 }

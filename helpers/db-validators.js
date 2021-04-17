@@ -37,8 +37,6 @@ const noExisteCategoriaPorNombre = async ( categoria ) =>
     
     const existeCat = await Categoria.find( query );
 
-    console.log(existeCat);
-
     if ( existeCat.length === 0 )
     {
         throw new Error(`La categoría ${ categoria } no existe en la base de datos.`);
@@ -88,8 +86,23 @@ const existeProductoPorId = async( producto ) =>
 
 }
 
+// Validar colecciones permitidas
+
+const coleccionesPermitidas = ( coleccion = '', colecciones = []) =>
+{
+
+    const incluida = colecciones.includes( coleccion );
+    if ( !incluida )
+    {
+        throw new Error(`La colección ${ coleccion }, no es permitida, ${ colecciones }`);
+    }
+
+    return true;
+}
+
 module.exports = 
 {
+    coleccionesPermitidas,
     emailExiste,
     esRoleValido,
     existeProducto,

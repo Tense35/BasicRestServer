@@ -52,7 +52,7 @@ const buscarCategorias = async( termino = '', res = response ) =>
         return res.json 
         ({
             results: ( categoria ) ? [ categoria ] : []
-        })
+        });
     }
 
     // Búsqueda independiente de mayúsculas/minúsculas
@@ -63,7 +63,7 @@ const buscarCategorias = async( termino = '', res = response ) =>
     return res.json 
     ({
         results: categorias 
-    })
+    });
 }
 
 const buscarProductos = async( termino = '', res = response ) => 
@@ -76,7 +76,7 @@ const buscarProductos = async( termino = '', res = response ) =>
         return res.json 
         ({
             results: ( producto ) ? [ producto ] : []
-        })
+        });
     }
 
     // Búsqueda independiente de mayúsculas/minúsculas
